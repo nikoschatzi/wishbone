@@ -1,1 +1,2 @@
-VHDL implementation of wishbone slave.
+# About project
+VHDL implementation of wishbne slave.
