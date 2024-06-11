@@ -8,76 +8,76 @@ use ieee.numeric_std.all;
 ------------------------------------- Entity decleration -----------------------------------------
 entity CommunicationCardFSM is
 port (
-        clk   :  in std_logic;   --pin17
-	    reset :  in std_logic;   --pin144
-		
-		--NANOFIP signals 
-	    RSTON : in std_logic;    -- pin51 acknowledge that reset signal was received by nanoFIP 
-	    VAR1_RDY : in std_logic; -- pin52 - I read data
-	    VAR2_RDY : in std_logic; -- pinXX - BROADCAST VARIABLE NOT USED
-	    VAR3_RDY : in std_logic; -- pin53 - I write data
-	    ERRFLAG : in std_logic;  -- pin55 groups errors
-		
-		P3_LENGTH :  out std_logic_vector (2 downto 0):= "101"; -- pins 58-59-60 use '101' for 124 bytes , 2V5 pins needed - I use power supply 
-		RSTIN : out std_logic ;  -- pin4 active low reset of NanoFIP and fieldrive 
-		NOSTAT : out std_logic;  -- pin137 when '1' nanoFIP status is disabled - last FIP byte	
-		VAR1_ACC : out std_logic; -- pin63 - I read data
-		VAR2_ACC : out std_logic; -- pin132 - BROADCAST VARIABLE NOT USED -- set to 0, otherwise ERRFLAG goes high
-		VAR3_ACC : out std_logic; -- pin64 - I write data
-				
-		--NANOFIP → Wishbone signals
-		ACK_I :  in  std_logic; -- pin57
-		DAT_I :  out  std_logic_vector (7 downto 0); -- pin24,25,99,100,28,30,31,101
-		
-		wclk_out  :	out std_logic; -- pin129 -- Wishbone clock
-		
-		ADR   :  out std_logic_vector (9 downto 0):= (others=>'0'); -- pin 112,113,114,115,97,119,120,121,122,125,129
-		DAT_O :  in std_logic_vector (7 downto 0):= "00000000"; -- pin 40,41,42,43,44,45,47,65
-		WE_O  :  out std_logic := '0'; -- pin 69
-		STB_O :  out std_logic := '0'; -- pin 8 
-		CYC_O :  out std_logic := '0'; -- pin 143 
-		RST_O :  out std_logic := '0'; -- pin 141 -- wishbone reset, **currently not used by me
-		
-		--Crate signals --Mother board--	
-		SCHB :  out std_logic_vector (7 downto 0) := "00000000";
-		MUX_A :  in std_logic_vector (7 downto 0) := "00000000";
---		MUX_B :  in std_logic_vector (7 downto 0) := "00000000";
---		MUX_C :  in std_logic_vector (7 downto 0) := "00000000";
---		MUX_D :  in std_logic_vector (7 downto 0) := "00000000";
---		MUX_E :  in std_logic_vector (7 downto 0) := "00000000";
---		MUX_F :  in std_logic_vector (7 downto 0) := "00000000";
---		MUX_G :  in std_logic_vector (7 downto 0) := "00000000";
---		MUX_H :  in std_logic_vector (7 downto 0) := "00000000";
-		
-		--Testing signals - data visualization 	
-        Top_B0: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-        Top_B1: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-        Top_B2: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-		Top_B3: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-		Top_B4: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-		Top_B5: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-		Top_B6: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-        Top_B7: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-		
-        Bottom_B0: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-        Bottom_B1: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-        Bottom_B2: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-		Bottom_B3: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-		Bottom_B4: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin	
-		Bottom_B5: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-		Bottom_B6: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-        Bottom_B7: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
-		
-		--Testing signals 
-		crate_clk_out :  out std_logic; --virtual pin
+	clk   :  in std_logic;   --pin17
+	reset :  in std_logic;   --pin144
+	
+	--NANOFIP signals 
+	RSTON : in std_logic;    -- pin51 acknowledge that reset signal was received by nanoFIP 
+	VAR1_RDY : in std_logic; -- pin52 - I read data
+	VAR2_RDY : in std_logic; -- pinXX - BROADCAST VARIABLE NOT USED
+	VAR3_RDY : in std_logic; -- pin53 - I write data
+	ERRFLAG : in std_logic;  -- pin55 groups errors
+	
+	P3_LENGTH :  out std_logic_vector (2 downto 0):= "101"; -- pins 58-59-60 use '101' for 124 bytes , 2V5 pins needed - I use power supply 
+	RSTIN : out std_logic ;  -- pin4 active low reset of NanoFIP and fieldrive 
+	NOSTAT : out std_logic;  -- pin137 when '1' nanoFIP status is disabled - last FIP byte	
+	VAR1_ACC : out std_logic; -- pin63 - I read data
+	VAR2_ACC : out std_logic; -- pin132 - BROADCAST VARIABLE NOT USED -- set to 0, otherwise ERRFLAG goes high
+	VAR3_ACC : out std_logic; -- pin64 - I write data
+	
+	--NANOFIP → Wishbone signals
+	ACK_I :  in  std_logic; -- pin57
+	DAT_I :  out  std_logic_vector (7 downto 0); -- pin24,25,99,100,28,30,31,101
+	
+	wclk_out  :	out std_logic; -- pin129 -- Wishbone clock
+	
+	ADR   :  out std_logic_vector (9 downto 0):= (others=>'0'); -- pin 112,113,114,115,97,119,120,121,122,125,129
+	DAT_O :  in std_logic_vector (7 downto 0):= "00000000"; -- pin 40,41,42,43,44,45,47,65
+	WE_O  :  out std_logic := '0'; -- pin 69
+	STB_O :  out std_logic := '0'; -- pin 8 
+	CYC_O :  out std_logic := '0'; -- pin 143 
+	RST_O :  out std_logic := '0'; -- pin 141 -- wishbone reset, **currently not used by me
+	
+	--Crate signals --Mother board--	
+	SCHB :  out std_logic_vector (7 downto 0) := "00000000";
+	MUX_A :  in std_logic_vector (7 downto 0) := "00000000";
+	--MUX_B :  in std_logic_vector (7 downto 0) := "00000000";
+	--MUX_C :  in std_logic_vector (7 downto 0) := "00000000";
+	--MUX_D :  in std_logic_vector (7 downto 0) := "00000000";
+	--MUX_E :  in std_logic_vector (7 downto 0) := "00000000";
+	--MUX_F :  in std_logic_vector (7 downto 0) := "00000000";
+	--MUX_G :  in std_logic_vector (7 downto 0) := "00000000";
+	--MUX_H :  in std_logic_vector (7 downto 0) := "00000000";
+	
+	--Testing signals - data visualization 	
+	Top_B0: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Top_B1: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Top_B2: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Top_B3: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Top_B4: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Top_B5: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Top_B6: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Top_B7: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	
+	Bottom_B0: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Bottom_B1: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Bottom_B2: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Bottom_B3: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Bottom_B4: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin	
+	Bottom_B5: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Bottom_B6: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	Bottom_B7: out std_logic_vector(7 downto 0)  := (others=>'0'); -- 1 byte for testing --virtual pin
+	
+	--Testing signals 
+	crate_clk_out :  out std_logic; --virtual pin
 	--	sampling_clk : out std_logic;   --virtual pin
-        LED1  :	out std_logic;  -- pin3
-		LED2  :	out std_logic;  -- pin7
-		LED3  :	out std_logic;  -- pin9
-		
-		watch_out : out std_logic_vector (31 downto 0); --testing only
-		watch_out_v3 : out std_logic_vector (31 downto 0)); --testing only
-	--	read_byte : out std_logic_vector (7 downto 0)); --testing only --virtual pin out is being used to probe using Quartus oscilloscope tool 
+	LED1  :	out std_logic;  -- pin3
+	LED2  :	out std_logic;  -- pin7
+	LED3  :	out std_logic;  -- pin9
+	
+	watch_out : out std_logic_vector (31 downto 0); --testing only
+	watch_out_v3 : out std_logic_vector (31 downto 0)); --testing only
+	--read_byte : out std_logic_vector (7 downto 0)); --testing only --virtual pin out is being used to probe using Quartus oscilloscope tool 
 		
 end entity;
 
@@ -93,7 +93,7 @@ component watchdog --*REMEMBER TO SET WISHBONE CLOCK IN PORT MAP DECLERATION ON 
 		en				: in std_logic;
 		reset			: in std_logic;
 		start_value		: in std_logic_vector(width-1 downto 0);
-	
+		
 		count			: out std_logic_vector(width-1 downto 0);
 		count_done		: out std_logic
 	);
